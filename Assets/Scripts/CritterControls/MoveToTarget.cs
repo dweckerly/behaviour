@@ -25,7 +25,7 @@ public class MoveToTarget : MonoBehaviour
     {
         if (target != Vector3.zero)
         {
-            var offset = target - transform.position;
+            Vector3 offset = target - transform.position;
             //Get the difference.
             if (offset.magnitude > .1f)
             {
@@ -33,6 +33,11 @@ public class MoveToTarget : MonoBehaviour
                 // The minimum allowable tolerance varies with the speed of the object and the framerate. 
                 // 2 * tolerance must be >= moveSpeed / framerate or the object will jump right over the stop.
                 offset = offset.normalized * speed;
+
+                if(!cc.isGrounded)
+                {
+                    offset.y = offset.y + (Physics.gravity.y * Time.deltaTime);
+                }
                 //normalize it and account for movement speed.
                 cc.Move(offset * Time.deltaTime);
                 //actually move the character.
